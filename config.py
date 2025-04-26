@@ -14,12 +14,11 @@ embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 FAISS_INDEX_PATH = os.path.join("db", "cv_index.faiss")
 METADATA_PATH = os.path.join("db", "cv_metadata.pkl")
 DEPLOYMENT_NAME = os.getenv("DEPLOYMENT_NAME", "gpt-35-turbo-16k")
-INITIAL_CANDIDATES = 200
-FINAL_RANKING = 50
 
-# Text chunking parameters
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+INITIAL_CANDIDATES = 150  # Reduced from 150
+FINAL_RANKING = 20
+CHUNK_SIZE = 1000  # Reduced from 1000
+CHUNK_OVERLAP = 200  # Reduced from 200
 
 # Azure OpenAI Configuration
 AZURE_CONFIG = {
