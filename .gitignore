@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Project specific
+cv_index.faiss
+cv_metadata.pkl
+images/
+applications/
+jobs/
+
+# Sensitive data
+.env
+
+# System files
+.DS_Store
+Thumbs.db
