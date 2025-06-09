@@ -2,22 +2,45 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Virtual Environment
 venv/
-env/
-.env
+ENV/
 
 # IDE
-.vscode/
 .idea/
+.vscode/
+*.swp
+*.swo
 
 # Project specific
-cv_index.faiss
-cv_metadata.pkl
+db/
 images/
-applications/
-jobs/
+*.pdf
+*.faiss
+*.pkl
+.env
+
+# Railway
+.railway/
 
 # Sensitive data
 .env
