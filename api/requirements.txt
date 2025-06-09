@@ -1,0 +1,11 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+azure-storage-blob==12.19.0
+faiss-cpu==1.7.4
+langchain==0.0.350
+langchain-openai==0.0.2
+python-dotenv==1.0.0
+pydantic==2.5.2
+gunicorn==21.2.0 
+# 91d15b09-59e8-48fd-96b4-7e4d5ab09f2e

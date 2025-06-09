@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional
 from src.cv_management import add_cv
+from src.storage import download_model_files
 # uvicorn api.test_api:app --reload --port 8000
 app = FastAPI() 
 
@@ -194,3 +195,39 @@ async def upload_cv(
                 "message": f"Internal server error: {str(e)}"
             }
         )
+
+# Startup event
+@app.on_event("startup")
+async def startup_event():
+    global faiss_index, metadata, ranked_cvs
+    
+    try:
+        # Download model files from Azure Storage
+        print("Downloading model files from Azure Storage...")
+        download_model_files()
+        print("Model files downloaded successfully")
+        
+        # Check if we're running in Railway environment
+        railway_images_dir = Path("/images")
+        if railway_images_dir.exists():
+            print("Running in Railway environment")
+            # Ensure data directories exist
+            os.makedirs(railway_images_dir, exist_ok=True)
+            os.makedirs(Path("/db"), exist_ok=True)
+            
+            # Update paths to use Railway storage
+            cv_dir = str(railway_images_dir)
+            print(f"Using Railway storage at {cv_dir}")
+        else:
+            print("Running in local environment")
+            cv_dir = "images"
+        
+        if (faiss_index is None or metadata is None):
+            print("Initializing system...")
+            faiss_index, metadata = initialize_system(cv_dir)
+            ranked_cvs = rank_cvs(job_desc_path, faiss_index, metadata)
+            print("System initialized successfully")
+    except Exception as e:
+        print(f"Error initializing system: {str(e)}")
+        # Don't raise the exception to allow the app to start
+        # The health check endpoint will indicate the system status
