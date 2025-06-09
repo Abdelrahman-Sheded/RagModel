@@ -584,9 +584,29 @@ async def get_job_stats(job_id: str):
 @app.on_event("startup")
 async def startup_event():
     global faiss_index, metadata, ranked_cvs
-    if (faiss_index is None or metadata is None):
-        try:
+    
+    try:
+        # Check if we're running in Railway environment
+        railway_images_dir = Path("/images")
+        if railway_images_dir.exists():
+            print("Running in Railway environment")
+            # Ensure data directories exist
+            os.makedirs(railway_images_dir, exist_ok=True)
+            os.makedirs(Path("/db"), exist_ok=True)
+            
+            # Update paths to use Railway storage
+            cv_dir = str(railway_images_dir)
+            print(f"Using Railway storage at {cv_dir}")
+        else:
+            print("Running in local environment")
+            cv_dir = "images"
+        
+        if (faiss_index is None or metadata is None):
+            print("Initializing system...")
             faiss_index, metadata = initialize_system(cv_dir)
             ranked_cvs = rank_cvs(job_desc_path, faiss_index, metadata)
-        except Exception as e:
-            print(f"Error initializing system: {str(e)}")
+            print("System initialized successfully")
+    except Exception as e:
+        print(f"Error initializing system: {str(e)}")
+        # Don't raise the exception to allow the app to start
+        # The health check endpoint will indicate the system status
