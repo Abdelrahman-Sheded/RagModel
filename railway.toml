@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "chmod +x build.sh && ./build.sh"
+buildCommand = "pip install --no-cache-dir -r requirements.txt && python -m spacy download en_core_web_sm && pip cache purge && find /usr/local/lib/python3.9/site-packages -name '*.pyc' -delete && find /usr/local/lib/python3.9/site-packages -name '__pycache__' -delete && find /usr/local/lib/python3.9/site-packages -name '*.dist-info' -delete && find /usr/local/lib/python3.9/site-packages -name '*.egg-info' -delete && find /usr/local/lib/python3.9/site-packages -name 'tests' -type d -exec rm -rf {} + && find /usr/local/lib/python3.9/site-packages -name 'docs' -type d -exec rm -rf {} +"
 
 [deploy]
 startCommand = "uvicorn api.test_api:app --host 0.0.0.0 --port $PORT"
