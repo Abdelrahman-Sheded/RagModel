@@ -586,6 +586,10 @@ async def startup_event():
     global faiss_index, metadata, ranked_cvs
     
     try:
+        # Debug port information
+        port = os.getenv("PORT", "8000")
+        print(f"Application starting on port: {port}")
+        
         # Check if we're running in Railway environment
         railway_images_dir = Path("/images")
         if railway_images_dir.exists():
