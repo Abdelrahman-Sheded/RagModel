@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  rag-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./db:/app/db
+    networks:
+      - app-network
+
+  django-backend:
+    build:
+      context: ../your-django-repo # Update this path to your Django repo
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - RAG_SERVICE_URL=http://rag-service:8000
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - rag-service
+    networks:
+      - app-network
+
+  nextjs-frontend:
+    build:
+      context: ../your-nextjs-repo # Update this path to your Next.js repo
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8001
+    depends_on:
+      - django-backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
